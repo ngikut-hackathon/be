@@ -8,9 +8,9 @@ nunjucks.configure("views", {
 });
 app.set("view engine", "njk");
 
-const indexRouter = require("./routes/index/index.router");
+const indexRouter = require("./routes/admin/index/index.router");
 
-const indexAPIRouter = require("./routes/index/index.api.router");
+const indexAPIRouter = require("./routes/clients/index/index.router");
 
 app.use("/", indexRouter);
 
