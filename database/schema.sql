@@ -1,12 +1,13 @@
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE IF NOT EXISTS hackathon.users (
     user_id INTEGER PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    role INTEGER NOT NULL,
+    password VARCHAR(255) NULL,
+    email VARCHAR(255) NOT NULL,
+    role INTEGER,
     created_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 );
 
-CREATE TABLE IF NOT EXISTS chat_session (
+CREATE TABLE IF NOT EXISTS hackathon.chat_session (
     session_id INTEGER PRIMARY KEY,
     user_id INTEGER NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -29,7 +30,7 @@ CREATE TABLE IF NOT EXISTS hackathon.kedinasan (
 );
 
 CREATE TABLE IF NOT EXISTS hackathon.reports (
-    report_id INTEGER PRIMARY KEY,
+    report_id VARCHAR(40) PRIMARY KEY,
     description VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
     status VARCHAR(50),

@@ -7,6 +7,7 @@ nunjucks.configure("views", {
   express: app,
 });
 app.set("view engine", "njk");
+app.use(express.json());
 
 const indexRouter = require("./routes/admin/index/index.router");
 

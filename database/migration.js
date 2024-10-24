@@ -1,54 +1,102 @@
-const mysql = require('mysql2');
-const fs = require('fs');
-const path = require('path');
-require('dotenv').config()
+// const fs = require('fs');
+// const path = require('path');
+// const { initiateConnection } = require('./connection');
 
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: `${process.env.MYSQL_USER}`,
-  password: `${process.env.MYSQL_PASSWORD}`,
-  multipleStatements: true
-});
+// const schemaPath = path.join(__dirname, 'schema.sql');
+// fs.readFile(schemaPath, 'utf-8', (err, data) => {
+//   if (err) {
+//     console.error('Error reading schema.sql:', err);
+//     return;
+//   }
+
+//   const createDatabaseQuery = `
+//     CREATE DATABASE IF NOT EXISTS hackathon;
+//     USE hackathon;
+//   `;
+
+//   initiateConnection.connect(connectErr => {
+//     if (connectErr) {
+//       console.error('Error connecting to the database:', connectErr);
+//       return;
+//     }
+
+//     console.log('Connected to the MySQL server.');
+
+//     initiateConnection.query(createDatabaseQuery, (dbErr) => {
+//       if (dbErr) {
+//         console.error('Error creating or selecting database:', dbErr.stack);
+//         initiateConnection.end();
+//         return;
+//       }
+
+//       console.log('Database created or selected successfully.');
+
+//       initiateConnection.query(data, (queryErr, results) => {
+//         if (queryErr) {
+//           console.error('Error executing schema creation query:', queryErr.stack);
+//           return;
+//         }
+
+//         console.log('Schema created successfully!');
+//       });
+
+//       initiateConnection.end();
+//     });
+//   });
+// });
+
+
+const fs = require('fs').promises; // Menggunakan versi Promise dari fs
+const path = require('path');
+const { initiateConnection } = require('./connection');
 
 const schemaPath = path.join(__dirname, 'schema.sql');
-fs.readFile(schemaPath, 'utf-8', (err, data) => {
-  if (err) {
-    console.error('Error reading schema.sql:', err);
-    return;
-  }
 
+async function readSchemaFile(filePath) {
+  try {
+    const data = await fs.readFile(filePath, 'utf-8');
+    return data;
+  } catch (error) {
+    console.error('Error reading schema.sql:', error);
+    throw error;
+  }
+}
+
+async function setupDatabase(connection, schema) {
   const createDatabaseQuery = `
     CREATE DATABASE IF NOT EXISTS hackathon;
     USE hackathon;
   `;
 
-  connection.connect(connectErr => {
-    if (connectErr) {
-      console.error('Error connecting to the database:', connectErr);
-      return;
-    }
-
+  try {
     console.log('Connected to the MySQL server.');
 
-    connection.query(createDatabaseQuery, (dbErr) => {
-      if (dbErr) {
-        console.error('Error creating or selecting database:', dbErr.stack);
-        connection.end();
-        return;
-      }
+    await connection.query(createDatabaseQuery);
+    console.log('Database created or selected successfully.');
 
-      console.log('Database created or selected successfully.');
+    await connection.query(schema);
+    console.log('Schema created successfully!');
+  } catch (error) {
+    console.error('Error setting up the database:', error);
+    throw error;
+  }
+}
 
-      connection.query(data, (queryErr, results) => {
-        if (queryErr) {
-          console.error('Error executing schema creation query:', queryErr.stack);
-          return;
-        }
+async function initializeSchema() {
+  let connection;
+  try {
+    connection = await initiateConnection;
+    const schema = await readSchemaFile(schemaPath);
+    await setupDatabase(connection, schema);
+  } catch (error) {
+    console.error('Error during database initialization:', error);
+  } finally {
+    if (connection) {
+      await connection.end();
+      console.log('Connection closed.');
+    }
+  }
+}
 
-        console.log('Schema created successfully!');
-      });
+initializeSchema();
 
-      connection.end();
-    });
-  });
-});
