@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const index = require("./index.controller");
+const auth = require("./auth.controller");
 
-router.route("/").get(index.getIndexAPI);
+router.route("/registerUser").post(auth.createUser);
 
 module.exports = router;

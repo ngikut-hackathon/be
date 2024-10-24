@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS hackathon.users (
+CREATE TABLE IF NOT EXISTS users (
     user_id INTEGER PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NULL,
@@ -7,14 +7,14 @@ CREATE TABLE IF NOT EXISTS hackathon.users (
     created_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 );
 
-CREATE TABLE IF NOT EXISTS hackathon.chat_session (
+CREATE TABLE IF NOT EXISTS chat_session (
     session_id INTEGER PRIMARY KEY,
     user_id INTEGER NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-CREATE TABLE IF NOT EXISTS hackathon.chat_message (
+CREATE TABLE IF NOT EXISTS chat_message (
     message_id INTEGER PRIMARY KEY,
     session_id INTEGER NOT NULL,
     message VARCHAR(255) NOT NULL,
@@ -22,14 +22,14 @@ CREATE TABLE IF NOT EXISTS hackathon.chat_message (
     FOREIGN KEY (session_id) REFERENCES chat_session(session_id)
 );
 
-CREATE TABLE IF NOT EXISTS hackathon.kedinasan (
+CREATE TABLE IF NOT EXISTS kedinasan (
     kedinasan_id INTEGER PRIMARY KEY,
     nama_dinas VARCHAR(255) NOT NULL,
     kelurahan VARCHAR(255),
     kecamatan VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS hackathon.reports (
+CREATE TABLE IF NOT EXISTS reports (
     report_id VARCHAR(40) PRIMARY KEY,
     description VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
