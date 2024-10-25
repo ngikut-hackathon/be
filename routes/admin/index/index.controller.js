@@ -1,5 +1,5 @@
 const getIndexPage = (req, res) => {
-  res.send("Hello World!");
+  res.render("admin/pages/dashboard/index");
 };
 
 module.exports = {

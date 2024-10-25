@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% include "admin/includes/head.njk" %}
+  <body class="sb-nav-fixed">
+    <div id="layoutSidenav">
+      {% include "admin/components/sidebar.njk" %}
+      <div id="layoutSidenav_content">
+        <main>
+          <div class="container-fluid px-4">
+            {% block content %} {% endblock %}
+          </div>
+        </main>
+        {% include "admin/components/footer.njk" %}
+      </div>
+    </div>
+    {% include "admin/includes/script.njk" %}
+  </body>
+</html>

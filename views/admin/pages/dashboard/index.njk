@@ -1,0 +1,60 @@
+{% extends "admin/layouts/masterLayout.njk" %} {% block content %} {% include
+"admin/components/navbar.njk" %}
+
+<h1 class="mt-4">Dashboard</h1>
+<ol class="breadcrumb mb-4">
+  <li class="breadcrumb-item active">Dashboard</li>
+</ol>
+
+<div class="row">
+  <!-- Jumlah User -->
+  <div class="col-xl-3 col-md-6">
+    <div class="card bg-primary text-white mb-2">
+      <div class="card-body">
+        <span>Jumlah User</span>
+        <p>23</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Jumlah Dinas -->
+  <div class="col-xl-3 col-md-6">
+    <div class="card bg-success text-white mb-2">
+      <div class="card-body">
+        <span>Jumlah Dinas</span>
+        <p>10</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Jumlah Kecamatan -->
+  <div class="col-xl-3 col-md-6">
+    <div class="card bg-warning text-white mb-2">
+      <div class="card-body">
+        <span>Jumlah Kecamatan</span>
+        <p>5</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Jumlah Kelurahan -->
+  <div class="col-xl-3 col-md-6">
+    <div class="card bg-info text-white mb-2">
+      <div class="card-body">
+        <span>Jumlah Kelurahan</span>
+        <p>12</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Jumlah Laporan -->
+  <div class="col-xl-3 col-md-6">
+    <div class="card bg-primary text-white mb-2">
+      <div class="card-body">
+        <span>Jumlah Laporan</span>
+        <p>30</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

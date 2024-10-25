@@ -1,0 +1,38 @@
+{% extends "admin/layouts/masterLayout.njk" %} {% block content %} {% include
+"admin/components/navbar.njk" %}
+
+<div class="container-fluid px-4">
+  <h1 class="mt-4">Firebase Auth Users</h1>
+  <ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Firebase Auth Users</li>
+  </ol>
+  <div class="card mb-4">
+    <div class="card-header">
+      <i class="fas fa-table me-1"></i>
+      User List
+    </div>
+    <div class="card-body">
+      <table id="datatablesSimple" class="table table-striped">
+        <thead>
+          <tr>
+            <th>UID</th>
+            <th>Email</th>
+            <th>Created At</th>
+            <th>Last Signed In</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr>
+            <td>{{ user.uid }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.createdAt }}</td>
+            <td>{{ user.lastSignedIn }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
