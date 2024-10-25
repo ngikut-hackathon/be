@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const report = require('./reports.controller');
+const report = require("./reports.controller");
 
 router.route("/createReport").post(report.createReport);
 

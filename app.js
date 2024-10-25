@@ -12,8 +12,8 @@ app.use(express.json());
 const indexRouter = require("./routes/admin/index/index.router");
 
 const indexAPIRouter = require("./routes/clients/index/index.router");
-const reportAPIRouter = require('./routes/clients/reports/reports.router');
-const authAPIRouter = require('./routes/clients/auth/auth.router');
+const reportAPIRouter = require("./routes/clients/reports/reports.router");
+const authAPIRouter = require("./routes/clients/auth/auth.router");
 
 app.use("/", indexRouter);
 

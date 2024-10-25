@@ -1,54 +1,90 @@
-const { createConnection } = require('../../../database/connection');
-
-const databaseName = process.env.DB_NAME
+const { db } = require("../../../database/db");
 
 const createUser = async (req, res) => {
-  const { displayName, email } = req.body;
+  const { displayName, email, profilePhotoURL } = req.body;
 
-  if (!displayName || !email) {
-    return sendResponse(res, 400, "Missing required fields: 'displayName' and 'email'", req.body);
+  // Validasi input
+  if (!displayName || typeof displayName !== "string") {
+    return res.status(400).json({
+      status: {
+        code: 400,
+        message: "Display name is required and must be a string",
+      },
+      data: null,
+    });
+  }
+
+  if (
+    !email ||
+    typeof email !== "string" ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  ) {
+    return res.status(400).json({
+      status: {
+        code: 400,
+        message: "Valid email is required",
+      },
+      data: null,
+    });
+  }
+
+  if (!profilePhotoURL || typeof profilePhotoURL !== "string") {
+    return res.status(400).json({
+      status: {
+        code: 400,
+        message: "Profile photo URL is required and must be a string",
+      },
+      data: null,
+    });
   }
 
   try {
-    const db = await createConnection();
+    const checkUserExistsQuery = `SELECT * FROM users WHERE email = ?`;
+    const [existingUser] = await db
+      .promise()
+      .query(checkUserExistsQuery, [email]);
 
-    const [maxIdResult] = await db.query(
-      `SELECT MAX(user_id) as maxUserId FROM ${databaseName}.users`
-    );
+    if (existingUser.length > 0) {
+      return res.status(409).json({
+        status: {
+          code: 409,
+          message: "User is already registered",
+        },
+        data: null,
+      });
+    }
 
-    const userId = (maxIdResult[0].maxUserId || 0) + 1;
-    const payload = {
-      user_id: userId,
-      name: displayName,
-      email: email
-    };
+    const insertNewUserQuery = `
+      INSERT INTO users (username, email, profile_photo_url, created_at)
+      VALUES (?, ?, ?, NOW())
+    `;
+    await db
+      .promise()
+      .query(insertNewUserQuery, [displayName, email, profilePhotoURL]);
 
-    await db.query(
-      `INSERT INTO ${databaseName}.users (user_id, username, email) VALUES (?, ?, ?)`,
-      [payload.user_id, payload.name, payload.email]
-    );
-
-    console.log('User created successfully with user_id:', payload.user_id);
-    res.status(200).json({
+    res.status(201).json({
       status: {
-        code: 200,
-        message: "Success Create User",
+        code: 201,
+        message: "User successfully created",
       },
-      data: payload
+      data: {
+        displayName,
+        email,
+        profilePhotoURL,
+      },
     });
   } catch (error) {
-    console.error('Error in createUser:', error);
-    res.status(400).json({
+    res.status(500).json({
       status: {
-        code: 400,
-        message: "Failed Create User",
+        code: 500,
+        message: "Failed to create user",
       },
-      data: req.body,
+      data: null,
       error: error.message,
     });
   }
 };
 
 module.exports = {
-    createUser
-}
+  createUser,
+};
